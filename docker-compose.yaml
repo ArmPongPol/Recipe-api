@@ -1,0 +1,16 @@
+services:
+  recipeDB:
+    image: postgres:latest
+    container_name: recipeDB
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: 12345678
+      POSTGRES_DB: recipe
+    ports:
+      - "5432:5432"
+
+  redis:
+    image: redis:latest
+    container_name: redis
+    ports:
+      - "6379:6379"
