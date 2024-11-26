@@ -22,9 +22,9 @@ class JwtAuthenticationFilter @Autowired constructor(
     response: HttpServletResponse,
     filterChain: FilterChain
   ) {
-    val jwt = extractJwtFromRequest(request)
-
-    if (jwt != null) {
+    val authHeader = request.getHeader("Authorization")
+    if (authHeader != null && authHeader.startsWith("Bearer ")) {
+      val jwt = authHeader.substring(7)
       val username = jwtUtil.extractUsername(jwt)
 
       if (username != null && SecurityContextHolder.getContext().authentication == null) {
@@ -39,26 +39,6 @@ class JwtAuthenticationFilter @Autowired constructor(
       }
     }
     filterChain.doFilter(request, response)
-  }
-
-  private fun extractJwtFromRequest(request: HttpServletRequest): String? {
-    // Check Authorization header
-    val authHeader = request.getHeader("Authorization")
-    if (authHeader != null && authHeader.startsWith("Bearer ")) {
-      return authHeader.substring(7)
-    }
-
-    // Check cookies
-    val cookies = request.cookies
-    if (cookies != null) {
-      for (cookie in cookies) {
-        if (cookie.name == "jwt") {
-          return cookie.value
-        }
-      }
-    }
-
-    return null
   }
 
 }

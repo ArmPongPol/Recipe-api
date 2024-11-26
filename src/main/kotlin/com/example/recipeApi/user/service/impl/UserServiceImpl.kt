@@ -43,7 +43,7 @@ class UserServiceImpl @Autowired constructor (
     )
   }
 
-  override fun signIn(request: UserSignInRequest, response: HttpServletResponse): String {
+  override fun signIn(request: UserSignInRequest): String {
     authenticationManager.authenticate(
       UsernamePasswordAuthenticationToken(request.username, request.password)
     )
@@ -52,15 +52,7 @@ class UserServiceImpl @Autowired constructor (
     val jwt = jwtUtil.generateToken(userDetail)
     val expirationDate = jwtUtil.getExpirationDateFromToken(jwt).time
 
-    val jwtCookie = ResponseCookie.from("cookie", jwt)
-      .httpOnly(true)
-      .maxAge(expirationDate)
-      .path("/")
-      .build()
-
-    response.addHeader("Set-Cookie", jwtCookie.toString())
-
-    return "Login Successful"
+    return jwt
   }
 
   override fun getAllUsers(): List<UserDto> {

@@ -7,6 +7,8 @@ import com.example.recipeApi.recipe.request.RecipeRequest
 import com.example.recipeApi.recipe.service.RecipeService
 import com.example.recipeApi.user.repository.UserRepository
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
 
 @Service
@@ -29,4 +31,10 @@ class RecipeServiceImpl @Autowired constructor(
 
     return recipe.toRecipeDto()
   }
+
+  override fun getAllRecipes(pageable: Pageable, search: String?): Page<RecipeDto> {
+    return recipeRepository.getAllRecipes(pageable, search)
+  }
+
+
 }

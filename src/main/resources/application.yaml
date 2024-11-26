@@ -3,15 +3,16 @@ spring:
     name: recipeApi
 
   datasource:
-      url: jdbc:postgresql://localhost:5432/recipe
-      username: root
-      password: 12345678
-      driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/recipe
+    username: root
+    password: 12345678
+    driver-class-name: org.postgresql.Driver
 
-  redis:
-    host: redis
-    port: 6379
-    timeout: 2000
+  data:
+    redis:
+      host: redis
+      port: 6379
+      timeout: 2000
 
   jpa:
     hibernate:
@@ -24,3 +25,9 @@ spring:
 
 server:
   port: 8080
+
+splipok:
+  api:
+    url: https://api.slipok.com/api/line/apikey/34825
+    key: SLIPOKALPQFL4
+#    endpoint: 34825

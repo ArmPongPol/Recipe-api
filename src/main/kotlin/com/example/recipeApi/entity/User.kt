@@ -22,7 +22,6 @@ data class User(
       name = name,
       username = username,
       email = email,
-      role = role.toString()
     )
   }
 }

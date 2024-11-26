@@ -16,7 +16,6 @@ class UserController @Autowired constructor (
 ) {
   @PostMapping("/sign-up")
   fun signUp(
-
     @RequestBody request: UserSignUpRequest
   ): ResponseEntity<Any> {
     return try {
@@ -29,10 +28,9 @@ class UserController @Autowired constructor (
   @PostMapping("/sign-in")
   fun signIn(
     @RequestBody request: UserSignInRequest,
-    response: HttpServletResponse,
   ): ResponseEntity<Any> {
     return try {
-      ResponseEntity.ok(userService.signIn(request, response))
+      ResponseEntity.ok(userService.signIn(request))
     } catch (e: Exception) {
       ResponseEntity.badRequest().body(e.message)
     }
