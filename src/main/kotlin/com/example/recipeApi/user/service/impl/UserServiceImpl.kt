@@ -4,15 +4,13 @@ import com.example.recipeApi.entity.User
 import com.example.recipeApi.user.dto.UserDto
 import com.example.recipeApi.user.dto.UserSignUpDto
 import com.example.recipeApi.user.repository.UserRepository
+import com.example.recipeApi.user.request.UpdateUserRequest
 import com.example.recipeApi.user.request.UserSignInRequest
 import com.example.recipeApi.user.request.UserSignUpRequest
-import com.example.recipeApi.user.response.LoginResponse
 import com.example.recipeApi.user.service.UserService
 import com.example.recipeApi.util.JwtUtil
 import jakarta.servlet.http.HttpServletResponse
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.http.ResponseCookie
-import org.springframework.http.ResponseEntity
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.userdetails.UserDetailsService
@@ -52,22 +50,28 @@ class UserServiceImpl @Autowired constructor (
     val jwt = jwtUtil.generateToken(userDetail)
     val expirationDate = jwtUtil.getExpirationDateFromToken(jwt).time
 
-    val jwtCookie = ResponseCookie.from("cookie", jwt)
-      .httpOnly(true)
-      .maxAge(expirationDate)
-      .path("/")
-      .build()
-
-    response.addHeader("Set-Cookie", jwtCookie.toString())
-
-    return "Login Successful"
+    return jwt
   }
 
-  override fun getAllUsers(): List<UserDto> {
-    return userRepository.findAll().map {
-      it.toUserDto()
+  override fun getProfile(userId: Long): UserDto {
+    userRepository.findById(userId).orElseThrow {
+      throw Exception("User not found")
     }
+
+    return userRepository.findById(userId).get().toUserDto()
   }
 
+  override fun updateProfile(userId: Long, request: UpdateUserRequest): UserDto {
+    val user = userRepository.findById(userId).orElseThrow {
+      throw Exception("User not found")
+    }
+
+    user.name = request.name
+    user.username = request.username
+
+    val updateUser = userRepository.save(user)
+
+    return updateUser.toUserDto()
+  }
 
 }

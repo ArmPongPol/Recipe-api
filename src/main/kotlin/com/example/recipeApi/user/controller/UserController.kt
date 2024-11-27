@@ -1,5 +1,6 @@
 package com.example.recipeApi.user.controller
 
+import com.example.recipeApi.user.request.UpdateUserRequest
 import com.example.recipeApi.user.request.UserSignInRequest
 import com.example.recipeApi.user.request.UserSignUpRequest
 import com.example.recipeApi.user.service.UserService
@@ -26,7 +27,7 @@ class UserController @Autowired constructor (
     }
   }
 
-  @PostMapping("/sign-in")
+  @PostMapping("/log-in")
   fun signIn(
     @RequestBody request: UserSignInRequest,
     response: HttpServletResponse,
@@ -39,10 +40,24 @@ class UserController @Autowired constructor (
   }
 
   @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
-  @GetMapping("/all")
-  fun getAllUsers(): ResponseEntity<Any> {
+  @GetMapping("/profile")
+  fun getAllUsers(
+    @RequestParam userId: Long
+  ): ResponseEntity<Any> {
     return try {
-      ResponseEntity.ok(userService.getAllUsers())
+      ResponseEntity.ok(userService.getProfile(userId))
+    } catch (e: Exception) {
+      ResponseEntity.badRequest().body(e.message)
+    }
+  }
+
+  @PutMapping("/profile")
+  fun updateProfile(
+    @RequestParam userId: Long,
+    @RequestBody request: UpdateUserRequest
+  ): ResponseEntity<Any> {
+    return try {
+      ResponseEntity.ok(userService.updateProfile(userId, request))
     } catch (e: Exception) {
       ResponseEntity.badRequest().body(e.message)
     }

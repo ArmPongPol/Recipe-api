@@ -17,6 +17,7 @@ data class Recipe(
   val description: String? = null,
   val imageUrl: String? = null,
   val userId: Long,
+  val isPublished: Boolean = false,
   @CreationTimestamp
   @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
   val createDate: Date = Date(),
@@ -36,6 +37,7 @@ data class Recipe(
       description = description,
       imageUrl = imageUrl,
       user = user?.toUserDto(),
+      isPublished = isPublished,
       createDate = createDate,
       modifiedDate = modifiedDate
     )
