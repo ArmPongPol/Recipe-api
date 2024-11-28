@@ -13,6 +13,7 @@ constructor(
   val description: String? = null,
   val imageUrl: String? = null,
   val user: UserDto? = null,
+  val rating: Double? = null,
   val isPublished: Boolean,
   val createDate: Date,
   val modifiedDate: Date,

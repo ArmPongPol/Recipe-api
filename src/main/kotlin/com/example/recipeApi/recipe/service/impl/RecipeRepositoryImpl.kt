@@ -47,6 +47,7 @@ class RecipeRepositoryImpl: RecipeRepositoryCustom {
             qRecipe.user.username,
             qRecipe.user.email,
           ),
+          qRecipe.rating,
           qRecipe.isPublished,
           qRecipe.createDate,
           qRecipe.modifiedDate

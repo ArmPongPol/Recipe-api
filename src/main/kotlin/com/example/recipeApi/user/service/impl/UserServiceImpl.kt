@@ -9,7 +9,6 @@ import com.example.recipeApi.user.request.UserSignInRequest
 import com.example.recipeApi.user.request.UserSignUpRequest
 import com.example.recipeApi.user.service.UserService
 import com.example.recipeApi.util.JwtUtil
-import jakarta.servlet.http.HttpServletResponse
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
@@ -41,7 +40,7 @@ class UserServiceImpl @Autowired constructor (
     )
   }
 
-  override fun signIn(request: UserSignInRequest, response: HttpServletResponse): String {
+  override fun signIn(request: UserSignInRequest): String {
     authenticationManager.authenticate(
       UsernamePasswordAuthenticationToken(request.username, request.password)
     )
@@ -67,7 +66,6 @@ class UserServiceImpl @Autowired constructor (
     }
 
     user.name = request.name
-    user.username = request.username
 
     val updateUser = userRepository.save(user)
 

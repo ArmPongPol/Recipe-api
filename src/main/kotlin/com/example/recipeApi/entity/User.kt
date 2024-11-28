@@ -14,7 +14,10 @@ data class User(
   val password: String,
   val email: String,
   @Enumerated(EnumType.STRING)
-  val role: UserRole = UserRole.USER
+  val role: UserRole = UserRole.USER,
+
+  @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+  val userRatingRecipes: List<UserRatingRecipe> = emptyList(),
 ) {
   fun toUserDto(): UserDto {
     return UserDto(

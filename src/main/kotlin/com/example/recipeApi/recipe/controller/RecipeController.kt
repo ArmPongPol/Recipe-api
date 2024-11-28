@@ -1,6 +1,7 @@
 package com.example.recipeApi.recipe.controller
 
 import com.example.recipeApi.entity.User
+import com.example.recipeApi.recipe.request.RecipeRatingRequest
 import com.example.recipeApi.recipe.request.RecipeRequest
 import com.example.recipeApi.recipe.service.RecipeService
 import jakarta.servlet.http.HttpServletRequest
@@ -55,6 +56,20 @@ class RecipeController @Autowired constructor(
     } catch (e: Exception) {
       logger.error(e.message)
       ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error")
+    }
+  }
+
+  @PostMapping("/rating/{recipeId}")
+  fun ratingRecipe(
+    @PathVariable recipeId: Long,
+    @RequestBody request: RecipeRatingRequest,
+  ): ResponseEntity<Any> {
+    return try {
+      recipeService.ratingRecipe(request, recipeId)
+      ResponseEntity.ok("Rating success")
+    } catch (e: Exception) {
+      logger.error(e.message)
+      ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.message)
     }
   }
 }
