@@ -35,7 +35,7 @@ class SecurityConfig @Autowired constructor(
       .authorizeHttpRequests { auth ->
         auth
           .requestMatchers("/api/user/sign-up").permitAll()
-          .requestMatchers("/api/user/sign-in").permitAll()
+          .requestMatchers("/api/user/log-in").permitAll()
           .anyRequest().authenticated()
       }
       .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter::class.java)

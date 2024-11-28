@@ -9,12 +9,15 @@ data class User(
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   val id: Long = 0,
-  val name: String,
-  val username: String,
+  var name: String,
+  var username: String,
   val password: String,
   val email: String,
   @Enumerated(EnumType.STRING)
-  val role: UserRole = UserRole.USER
+  val role: UserRole = UserRole.USER,
+
+  @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+  val userRatingRecipes: List<UserRatingRecipe> = emptyList(),
 ) {
   fun toUserDto(): UserDto {
     return UserDto(
@@ -22,7 +25,6 @@ data class User(
       name = name,
       username = username,
       email = email,
-      role = role.toString()
     )
   }
 }

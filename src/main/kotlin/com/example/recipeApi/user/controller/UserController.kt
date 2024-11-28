@@ -1,8 +1,10 @@
 package com.example.recipeApi.user.controller
 
+import com.example.recipeApi.user.request.UpdateUserRequest
 import com.example.recipeApi.user.request.UserSignInRequest
 import com.example.recipeApi.user.request.UserSignUpRequest
 import com.example.recipeApi.user.service.UserService
+import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
@@ -26,23 +28,36 @@ class UserController @Autowired constructor (
     }
   }
 
-  @PostMapping("/sign-in")
+  @PostMapping("/log-in")
   fun signIn(
     @RequestBody request: UserSignInRequest,
-    response: HttpServletResponse,
   ): ResponseEntity<Any> {
     return try {
-      ResponseEntity.ok(userService.signIn(request, response))
+      ResponseEntity.ok(userService.signIn(request))
     } catch (e: Exception) {
       ResponseEntity.badRequest().body(e.message)
     }
   }
 
   @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
-  @GetMapping("/all")
-  fun getAllUsers(): ResponseEntity<Any> {
+  @GetMapping("/profile")
+  fun getAllUsers(
+    @RequestParam userId: Long
+  ): ResponseEntity<Any> {
     return try {
-      ResponseEntity.ok(userService.getAllUsers())
+      ResponseEntity.ok(userService.getProfile(userId))
+    } catch (e: Exception) {
+      ResponseEntity.badRequest().body(e.message)
+    }
+  }
+
+  @PutMapping("/profile")
+  fun updateProfile(
+    @RequestParam userId: Long,
+    @RequestBody request: UpdateUserRequest
+  ): ResponseEntity<Any> {
+    return try {
+      ResponseEntity.ok(userService.updateProfile(userId, request))
     } catch (e: Exception) {
       ResponseEntity.badRequest().body(e.message)
     }
