@@ -35,9 +35,9 @@ class SecurityConfig @Autowired constructor(
       .cors { it.configurationSource(CorsConfigurationSource()) }
       .authorizeHttpRequests { auth ->
         auth
-          .requestMatchers("/api/user/sign-up").permitAll()
-          .requestMatchers("/api/user/log-in").permitAll()
-          .requestMatchers("/ws/**").permitAll()
+//          .requestMatchers("/api/user/sign-up").permitAll()
+//          .requestMatchers("/api/user/log-in").permitAll()
+          .requestMatchers("/**").permitAll()
           .anyRequest().authenticated()
       }
       .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter::class.java)
