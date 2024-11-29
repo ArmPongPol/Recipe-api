@@ -32,10 +32,12 @@ class SecurityConfig @Autowired constructor(
   fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
     http
       .csrf { it.disable() }
+      .cors { it.configurationSource(CorsConfigurationSource()) }
       .authorizeHttpRequests { auth ->
         auth
-          .requestMatchers("/api/user/sign-up").permitAll()
-          .requestMatchers("/api/user/log-in").permitAll()
+//          .requestMatchers("/api/user/sign-up").permitAll()
+//          .requestMatchers("/api/user/log-in").permitAll()
+          .requestMatchers("/**").permitAll()
           .anyRequest().authenticated()
       }
       .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter::class.java)

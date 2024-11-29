@@ -10,6 +10,7 @@ import com.example.recipeApi.recipe.request.RecipeRatingRequest
 import com.example.recipeApi.recipe.request.RecipeRequest
 import com.example.recipeApi.recipe.service.RecipeService
 import com.example.recipeApi.user.repository.UserRepository
+import com.example.recipeApi.util.NotificationUtil
 import jakarta.transaction.Transactional
 import org.apache.coyote.BadRequestException
 import org.springframework.beans.factory.annotation.Autowired
@@ -22,6 +23,7 @@ class RecipeServiceImpl @Autowired constructor(
   private val recipeRepository: RecipeRepository,
   private val userRepository: UserRepository,
   private val userRatingRecipeRepository: UserRatingRecipeRepository,
+  private val notificationUtil: NotificationUtil,
 ) : RecipeService {
   override fun createRecipe(request: RecipeRequest): RecipeDto {
     userRepository.findById(request.userId).orElseThrow {
@@ -77,6 +79,8 @@ class RecipeServiceImpl @Autowired constructor(
     val sumRating = userRatingRecipeRepository.sumRatingByRecipeId(recipeId)
 
     recipe.rating = sumRating / countRating
+
+    notificationUtil.ratingNotification(request.userId, request.rating, recipeId)
 
     return true
   }
